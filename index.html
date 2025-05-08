@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +65,12 @@
   <style>
     #dtime {
       font-family: Menlo, Consolas, Monaco, 'Lucida Console', monospace;
-      font-size: 100px;
+      /*font-size: 100px;*/
+      text-align: center;
+      font-size: 25vw;
+    }
+    #buttons {
+      text-align: center;
     }
   </style>
 </head>
@@ -72,9 +78,11 @@
 <body>
   <div id="dtime">00:00
   </div>
-  <button id="bstart">Start</button>
-  <button id="bstop">Stop</button>
-  <button id="breset">Reset</button>
+  <div id="buttons">
+    <button id="bstart">Start</button>
+    <button id="bstop">Stop</button>
+    <button id="breset">Reset</button>
+  </div>
 </body>
 
 </html>
