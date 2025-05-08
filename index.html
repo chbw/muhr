@@ -1,69 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  function twodigits(number) {
-    var str = '0' + number;
-    str = str.substr(str.length-2,2);
-    return str;
-  }
-  function stopwatchstring(timedelta) {
-    var date = new Date(timedelta);
-    var str = twodigits(date.getMinutes()) + ':' + 
-      twodigits(date.getSeconds());
-    return str;
-  }
-
-  var timerid = 0;
-  var socket = io.connect();
-  var lasttimedrawed = 0;
-
-  socket.on('update', function (data) {
-    clearInterval(timerid);
-    var localstarttime = Date.now() - (data.oldtime + data.updatetime - data.starttime);
-    $( "#dtime" ).text(stopwatchstring(data.oldtime + data.updatetime - data.starttime));
-    if(data.starttime > 0) {
-      timerid = setInterval(function() {
-        var timetodraw = Date.now()-localstarttime;
-        if( timetodraw != lasttimedrawed) {
-          $( "#dtime" ).text(stopwatchstring(timetodraw));
-          lasttimedrawed = timetodraw;
-        }
-      },
-      100);
-    } else {
-      $( "#dtime" ).text(stopwatchstring(data.oldtime));
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+  <title>MaturaUHR</title>
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    function twodigits(number) {
+      var str = '0' + number;
+      str = str.substr(str.length - 2, 2);
+      return str;
     }
-  });
+    function stopwatchstring(timedelta) {
+      var date = new Date(timedelta);
+      var str = twodigits(date.getMinutes()) + ':' +
+        twodigits(date.getSeconds());
+      return str;
+    }
 
-  $(function() {
-    $( "#bstart" ).button()
-      .click(function( event ) {
-        event.preventDefault();
-        socket.emit('start',0);
-      });
-    $( "#bstop" ).button()
-      .click(function( event ) {
-        event.preventDefault();
-        socket.emit('stop',0);
-      });
-    $( "#breset" ).button()
-      .click(function( event ) {
-        event.preventDefault();
-        socket.emit('reset',0);
-      });
-  });
-</script>
+    var timerid = 0;
+    var socket = io.connect();
+    var lasttimedrawed = 0;
+
+    socket.on('update', function (data) {
+      clearInterval(timerid);
+      var localstarttime = Date.now() - (data.oldtime + data.updatetime - data.starttime);
+      $("#dtime").text(stopwatchstring(data.oldtime + data.updatetime - data.starttime));
+      if (data.starttime > 0) {
+        timerid = setInterval(function () {
+          var timetodraw = Date.now() - localstarttime;
+          if (timetodraw != lasttimedrawed) {
+            $("#dtime").text(stopwatchstring(timetodraw));
+            lasttimedrawed = timetodraw;
+          }
+        },
+          100);
+      } else {
+        $("#dtime").text(stopwatchstring(data.oldtime));
+      }
+    });
+
+    $(function () {
+      $("#bstart").button()
+        .click(function (event) {
+          event.preventDefault();
+          socket.emit('start', 0);
+        });
+      $("#bstop").button()
+        .click(function (event) {
+          event.preventDefault();
+          socket.emit('stop', 0);
+        });
+      $("#breset").button()
+        .click(function (event) {
+          event.preventDefault();
+          socket.emit('reset', 0);
+        });
+    });
+  </script>
+  <style>
+    #dtime {
+      font-family: Menlo, Consolas, Monaco, 'Lucida Console', monospace;
+      font-size: 100px;
+    }
+  </style>
 </head>
-<body>
-<div id="dtime" style="font-family: Menlo, Consolas, Monaco, 'Lucida Console', monospace; font-size: 100px">00:00</div>
-<button id="bstart">Start</button>
-<button id="bstop">Stop</button>
-<button id="breset">Reset</button>
-</body>
-</html>
 
+<body>
+  <div id="dtime">00:00
+  </div>
+  <button id="bstart">Start</button>
+  <button id="bstop">Stop</button>
+  <button id="breset">Reset</button>
+</body>
+
+</html>
